@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
+<!ENTITY % RFC2119 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
+]>
+<?rfc rfcedstyle="yes" ?>
+<?rfc symrefs="yes" ?>
+<?rfc compact="yes" ?>
+<?rfc sortrefs="yes" ?>
+<?rfc toc="yes" ?>
+<?rfc tocompact="yes"?>
+<rfc category="std" docName="draft-boucadair-lisp-rfc8113bis-00"
+     ipr="trust200902" obsoletes="8113">
+  <front>
+    <title abbrev="LISP Packet Type Allocations">Locator/ID Separation
+    Protocol (LISP): Shared Extension Message &amp; IANA Registry for Packet
+    Type Allocations</title>
+
+    <author fullname="Mohamed Boucadair" initials="M." surname="Boucadair">
+      <organization>Orange</organization>
+
+      <address>
+        <postal>
+          <street></street>
+
+          <city>Rennes</city>
+
+          <code>35000</code>
+
+          <country>France</country>
+        </postal>
+
+        <email>mohamed.boucadair@orange.com</email>
+      </address>
+    </author>
+
+    <author fullname="Christian Jacquenet" initials="C." surname="Jacquenet">
+      <organization>Orange</organization>
+
+      <address>
+        <postal>
+          <street></street>
+
+          <city>Rennes</city>
+
+          <code>35000</code>
+
+          <country>France</country>
+        </postal>
+
+        <email>christian.jacquenet@orange.com</email>
+      </address>
+    </author>
+
+    <date day="13" month="September" year="2018" />
+
+    <area>Internet</area>
+
+    <workgroup>LISP</workgroup>
+
+    <keyword>Shared Experiment Code</keyword>
+
+    <keyword>LISP codepoints</keyword>
+
+    <keyword>Experiment Identifier</keyword>
+
+    <keyword>Experiment ID</keyword>
+
+    <keyword>LISP Experimental Registry</keyword>
+
+    <keyword>LISP Extension</keyword>
+
+    <keyword>Extending LISP</keyword>
+
+    <abstract>
+      <t>This document specifies a Locator/ID Separation Protocol (LISP)
+      shared message type for defining future extensions and conducting
+      experiments without consuming a LISP packet type codepoint for each
+      extension. It also defines a registry for LISP Packet Type
+      allocations.</t>
+
+      <t>This document obsoletes RFC 8113.</t>
+    </abstract>
+  </front>
+
+  <middle>
+    <section title="Introduction">
+      <t>The Locator/ID Separation Protocol (LISP) base specification, <xref
+      target="RFC6830"></xref>, defines a set of primitives that are
+      identified with a packet type code. Several extensions have been
+      proposed to add more LISP functionalities. It is expected that
+      additional LISP extensions will be proposed in the future.</t>
+
+      <t>The "LISP Packet Types" IANA registry (see <xref
+      target="iana"></xref>) is used to ease the tracking of LISP message
+      types.</t>
+
+      <t>Because of the limited type space <xref target="RFC6830"></xref> and
+      the need to conduct experiments to assess new LISP extensions, this
+      document specifies a shared LISP extension message type and describes a
+      procedure for registering LISP shared extension sub-types (see <xref
+      target="exp"></xref>). Concretely, one single LISP message type code is
+      dedicated to future LISP extensions; sub-types are used to uniquely
+      identify a given LISP extension making use of the shared LISP extension
+      message type. These identifiers are selected by the author(s) of the
+      corresponding LISP specification that introduces a new LISP extension
+      message type.</t>
+    </section>
+
+    <section title="Requirements Language">
+      <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+      "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+      document are to be interpreted as described in <xref
+      target="RFC2119"></xref>.</t>
+    </section>
+
+    <section anchor="exp" title="LISP Shared Extension Message Type ">
+      <t><xref target="expf"></xref> depicts the common format of the LISP
+      shared extension message. The type field MUST be set to 15 (see <xref
+      target="iana"></xref>).</t>
+
+      <t><figure anchor="expf" title="LISP Shared Extension Message Type">
+          <artwork><![CDATA[        0                   1                   2                   3
+        0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+       |Type=15|        Sub-type       |   extension-specific          |
+       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+       //                    extension-specific                       //
+       //                                                             //
+       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+]]></artwork>
+        </figure>The "Sub-type" field conveys a unique identifier that MUST be
+      registered with IANA (see <xref target="id"></xref>).</t>
+
+      <t>The exact structure of the 'extension-specific' portion of the
+      message is specified in the corresponding specification document.</t>
+    </section>
+
+    <section title="Security Considerations">
+      <t>This document does not introduce any additional security issues other
+      than those discussed in <xref target="RFC6830"></xref>.</t>
+    </section>
+
+    <section anchor="iana" title="IANA Considerations">
+      <section anchor="ptype" title="LISP Packet Types">
+        <t>IANA has created a protocol registry for LISP Packet Types,
+        numbered 0-15. </t>
+
+        <t>The values in the ranges 5-7 and 9-14 can be assigned via Standards
+        Action <xref target="RFC8126"></xref>. Documents that request for a
+        new LISP packet type may indicate a preferred value in the
+        corresponding IANA sections.</t>
+
+        <t>IANA is requested to replace the reference to RFC8113 with the RFC
+        number to be assigned to this document. Also, IANA is requested to
+        update the table as follows: </t>
+
+        <t><figure>
+            <artwork><![CDATA[OLD:
+
+Message                           Code    Reference
+================================= ==== ===============
+LISP Shared Extension Message     15      [RFC8113]
+
+NEW:
+Message                           Code    Reference
+================================= ==== ===============
+LISP Shared Extension Message     15      [ThisDocument]]]></artwork>
+          </figure></t>
+      </section>
+
+      <section anchor="id" title="Sub-Types">
+        <t>IANA has created the "LISP Shared Extension Message Type Sub-types"
+        registry. IANA is requested to update that registry by replacing the
+        reference to RFC8113 with the RFC number to be assigned to this
+        document. </t>
+
+        <t>The values in the range 0-1023 are assigned via Standards Action.
+        This range is provisioned to anticipate, in particular, the exhaustion
+        of the LISP Packet types.</t>
+
+        <t>The values in the range 1024-4095 are assigned on a First Come,
+        First Served (FCFS) basis. The registration procedure should provide
+        IANA with the desired codepoint and a point of contact; providing a
+        short description (together with an acronym, if relevant) of the
+        foreseen usage of the extension message is also encouraged.</t>
+      </section>
+    </section>
+
+    <section title="Acknowledgments">
+      <t>This work is partly funded by ANR LISP-Lab project
+      #ANR-13-INFR-009-X.</t>
+
+      <t>Many thanks to Luigi Iannone, Dino Farinacci, and Alvaro Retana for
+      the review.</t>
+
+      <t>Thanks to Geoff Huston for the RtgDir directorate review.</t>
+    </section>
+  </middle>
+
+  <back>
+    <references title="Normative References">
+      <?rfc include='reference.RFC.2119'?>
+
+      <?rfc include='reference.RFC.6830'?>
+
+      <?rfc include='reference.RFC.8126'?>
+    </references>
+  </back>
+</rfc>
